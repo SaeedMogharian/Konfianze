@@ -8,9 +8,5 @@ public class EmptyPlace : Place
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }

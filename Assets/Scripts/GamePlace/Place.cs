@@ -30,9 +30,9 @@ namespace GamePlace
         [SerializeField] private Place downPlace;
         public Place DownPlace => downPlace;
 
-        public void LightUp()
-        {
-            Debug.Log("Changed Color", gameObject);
-        }
+        // public void LightUp()
+        // {
+        //     Debug.Log("Changed Color", gameObject);
+        // }
     }
 }

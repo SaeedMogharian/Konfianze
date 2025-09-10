@@ -211,6 +211,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 2
+  food: 0
+  health: 0
+  powerupType: 0
+  danger: 0
+  endpoint: 0
   leftPlace: {fileID: 1135502018}
   rightPlace: {fileID: 19606978}
   upPlace: {fileID: 0}
@@ -307,6 +312,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 3
+  food: 0
+  health: 0
+  powerupType: 0
+  danger: 0
+  endpoint: 0
   leftPlace: {fileID: 8024290}
   rightPlace: {fileID: 0}
   upPlace: {fileID: 0}
@@ -459,6 +469,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 5
+  food: 0
+  health: 0
+  powerupType: 0
+  danger: 0
+  endpoint: 0
   leftPlace: {fileID: 1764569070}
   rightPlace: {fileID: 1227335144}
   upPlace: {fileID: 8024290}
@@ -776,6 +791,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 8
+  food: 0
+  health: 0
+  powerupType: 0
+  danger: 0
+  endpoint: 0
   leftPlace: {fileID: 1654440920}
   rightPlace: {fileID: 1875795737}
   upPlace: {fileID: 491895084}
@@ -803,6 +823,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 1
+  food: 0
+  health: 0
+  powerupType: 0
+  danger: 0
+  endpoint: 0
   leftPlace: {fileID: 0}
   rightPlace: {fileID: 8024290}
   upPlace: {fileID: 0}
@@ -899,6 +924,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 6
+  food: 0
+  health: 0
+  powerupType: 0
+  danger: 0
+  endpoint: 0
   leftPlace: {fileID: 491895084}
   rightPlace: {fileID: 0}
   upPlace: {fileID: 19606978}
@@ -1018,7 +1048,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   food: 3
-  health: 0
+  health: 100
 --- !u!1001 &1654440917
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1111,6 +1141,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 7
+  food: 0
+  health: 0
+  powerupType: 0
+  danger: 0
+  endpoint: 0
   leftPlace: {fileID: 0}
   rightPlace: {fileID: 825467303}
   upPlace: {fileID: 1764569070}
@@ -1207,6 +1242,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 4
+  food: 0
+  health: 0
+  powerupType: 0
+  danger: 0
+  endpoint: 0
   leftPlace: {fileID: 0}
   rightPlace: {fileID: 491895084}
   upPlace: {fileID: 1135502018}
@@ -1303,6 +1343,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 9
+  food: 0
+  health: 0
+  powerupType: 0
+  danger: 0
+  endpoint: 0
   leftPlace: {fileID: 825467303}
   rightPlace: {fileID: 0}
   upPlace: {fileID: 1227335144}

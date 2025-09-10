@@ -55,6 +55,7 @@ public class GameBoard : MonoBehaviour
 public enum RoundState
 {
     Guidance, 
+    AbilityAppliance,
     Choose,
     Consequences,
 }

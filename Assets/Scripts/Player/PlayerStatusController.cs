@@ -1,3 +1,5 @@
+using System;
+using GamePlace;
 using UnityEngine;
 
 namespace Player
@@ -7,22 +9,19 @@ namespace Player
         [SerializeField] private int food;
         [SerializeField] private int health;
 
-        public void ConsumeFood ()
+        private void Awake()
         {
-            food -= 1;
-        }
-    
-    
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
-        
+            food = 3;
+            health = 100;
         }
 
-        // Update is called once per frame
-        void Update()
+        public void Consequence(Place place)
         {
-        
+            // consume food
+            food -= 1;
+            // Collect food and health
+            food += place.Food;
+            health += place.Healing;
         }
     }
 }

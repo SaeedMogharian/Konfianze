@@ -4,9 +4,22 @@ namespace GamePlace
 {
     public class Place : MonoBehaviour
     {
-
         [SerializeField] private int id;
         public int Id => id;
+
+        [SerializeField] private int food;
+        public int Food => food; 
+        [SerializeField] private int health;
+        public int Healing => health;
+        [SerializeField] private int powerupType;
+        
+        
+        public int PowerupType => powerupType;
+        [SerializeField] private bool danger;
+        public bool Danger => danger;
+        [SerializeField] private bool endpoint;
+        public bool Endpoint => endpoint;
+        
     
         [SerializeField] private Place leftPlace;
         public Place LeftPlace => leftPlace;
@@ -17,10 +30,9 @@ namespace GamePlace
         [SerializeField] private Place downPlace;
         public Place DownPlace => downPlace;
 
-        public void LighUp()
+        public void LightUp()
         {
             Debug.Log("Changed Color", gameObject);
         }
-    
     }
 }

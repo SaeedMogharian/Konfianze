@@ -211,15 +211,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 2
-  food: 0
-  health: 0
-  powerupType: 0
-  danger: 0
-  endpoint: 0
   leftPlace: {fileID: 1135502018}
   rightPlace: {fileID: 19606978}
   upPlace: {fileID: 0}
   downPlace: {fileID: 491895084}
+  endpoint: 0
+  category: 0
+  possibleCards: []
 --- !u!1001 &19606975
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -312,15 +310,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 3
-  food: 0
-  health: 0
-  powerupType: 0
-  danger: 0
-  endpoint: 0
   leftPlace: {fileID: 8024290}
   rightPlace: {fileID: 0}
   upPlace: {fileID: 0}
   downPlace: {fileID: 1227335144}
+  endpoint: 1
+  category: 0
+  possibleCards: []
 --- !u!1 &73491629
 GameObject:
   m_ObjectHideFlags: 0
@@ -469,15 +465,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 5
-  food: 0
-  health: 0
-  powerupType: 0
-  danger: 0
-  endpoint: 0
   leftPlace: {fileID: 1764569070}
   rightPlace: {fileID: 1227335144}
   upPlace: {fileID: 8024290}
   downPlace: {fileID: 825467303}
+  endpoint: 0
+  category: 1
+  possibleCards:
+  - {fileID: 11400000, guid: c9e643b67eaab467fa456d1c152f6adf, type: 2}
+  - {fileID: 11400000, guid: 46b63c06373364df89818309bb15f77d, type: 2}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -791,15 +787,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 8
-  food: 0
-  health: 0
-  powerupType: 0
-  danger: 0
-  endpoint: 0
   leftPlace: {fileID: 1654440920}
   rightPlace: {fileID: 1875795737}
   upPlace: {fileID: 491895084}
   downPlace: {fileID: 0}
+  endpoint: 0
+  category: 0
+  possibleCards: []
 --- !u!1 &1135502013 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7488190293868751333, guid: 17f3b1d956d2f4004a94b7a3f67b99fe, type: 3}
@@ -823,15 +817,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 1
-  food: 0
-  health: 0
-  powerupType: 0
-  danger: 0
-  endpoint: 0
   leftPlace: {fileID: 0}
   rightPlace: {fileID: 8024290}
   upPlace: {fileID: 0}
   downPlace: {fileID: 1764569070}
+  endpoint: 0
+  category: 0
+  possibleCards: []
 --- !u!1001 &1227335141
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -924,15 +916,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 6
-  food: 0
-  health: 0
-  powerupType: 0
-  danger: 0
-  endpoint: 0
   leftPlace: {fileID: 491895084}
   rightPlace: {fileID: 0}
   upPlace: {fileID: 19606978}
   downPlace: {fileID: 1875795737}
+  endpoint: 0
+  category: 0
+  possibleCards: []
 --- !u!1 &1580383604
 GameObject:
   m_ObjectHideFlags: 0
@@ -945,6 +935,7 @@ GameObject:
   - component: {fileID: 1580383605}
   - component: {fileID: 1580383607}
   - component: {fileID: 1580383608}
+  - component: {fileID: 1580383609}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1049,6 +1040,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   food: 3
   health: 100
+  time: 0
+--- !u!114 &1580383609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1580383604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8879b5b1900114640bce97579d89cefb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1654440917
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1141,15 +1145,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 7
-  food: 0
-  health: 0
-  powerupType: 0
-  danger: 0
-  endpoint: 0
   leftPlace: {fileID: 0}
   rightPlace: {fileID: 825467303}
   upPlace: {fileID: 1764569070}
   downPlace: {fileID: 0}
+  endpoint: 0
+  category: 0
+  possibleCards: []
 --- !u!1001 &1764569067
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1242,15 +1244,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 4
-  food: 0
-  health: 0
-  powerupType: 0
-  danger: 0
-  endpoint: 0
   leftPlace: {fileID: 0}
   rightPlace: {fileID: 491895084}
   upPlace: {fileID: 1135502018}
   downPlace: {fileID: 1654440920}
+  endpoint: 0
+  category: 0
+  possibleCards: []
 --- !u!1001 &1875795734
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1343,15 +1343,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 9
-  food: 0
-  health: 0
-  powerupType: 0
-  danger: 0
-  endpoint: 0
   leftPlace: {fileID: 825467303}
   rightPlace: {fileID: 0}
   upPlace: {fileID: 1227335144}
   downPlace: {fileID: 0}
+  endpoint: 0
+  category: 0
+  possibleCards: []
 --- !u!1001 &8457902122079353547
 PrefabInstance:
   m_ObjectHideFlags: 0

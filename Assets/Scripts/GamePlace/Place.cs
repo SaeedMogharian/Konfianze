@@ -1,4 +1,6 @@
 using UnityEngine;
+using Card;
+using System.Collections.Generic;
 
 namespace GamePlace
 {
@@ -6,21 +8,8 @@ namespace GamePlace
     {
         [SerializeField] private int id;
         public int Id => id;
-
-        [SerializeField] private int food;
-        public int Food => food; 
-        [SerializeField] private int health;
-        public int Healing => health;
-        [SerializeField] private int powerupType;
         
-        
-        public int PowerupType => powerupType;
-        [SerializeField] private bool danger;
-        public bool Danger => danger;
-        [SerializeField] private bool endpoint;
-        public bool Endpoint => endpoint;
-        
-    
+        // Place alignment
         [SerializeField] private Place leftPlace;
         public Place LeftPlace => leftPlace;
         [SerializeField] private Place rightPlace;
@@ -29,10 +18,26 @@ namespace GamePlace
         public Place UpPlace => upPlace;
         [SerializeField] private Place downPlace;
         public Place DownPlace => downPlace;
-
-        // public void LightUp()
-        // {
-        //     Debug.Log("Changed Color", gameObject);
-        // }
+        
+        [SerializeField] private bool endpoint;
+        public bool Endpoint => endpoint;
+        
+        [SerializeField] private PlaceCategory category;
+        public PlaceCategory Category => category;
+        
+        // Serialized card pool for this place
+        [SerializeField] private List<CardData> possibleCards;
+        
+        
+        public CardData DrawCard()
+        {
+            if (possibleCards == null || possibleCards.Count == 0)
+                return null;
+                
+            int randomIndex = Random.Range(0, possibleCards.Count);
+            return possibleCards[randomIndex];
+        }
     }
+    
+    public enum PlaceCategory { Empty, Resource, Ability, Danger }
 }

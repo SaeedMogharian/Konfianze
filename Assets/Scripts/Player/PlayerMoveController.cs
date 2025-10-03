@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using GamePlace;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Card;
 
 namespace Player
 {
-    [RequireComponent(typeof(PlayerStatusController))]
     public class PlayerMoveController : MonoBehaviour
     {
         [SerializeField] private Place initializedPlace;
@@ -35,6 +35,13 @@ namespace Player
         public void EnableKnightMove(bool enable) => _knightMove.IsEnabled = enable;
         public void EnableDoubleMove(bool enable) => _doubleMove.IsEnabled = enable;
         
+        public void DisableAllSpecialMoves()
+        {
+            EnableKnightMove(false);
+            EnableDoubleMove(false);
+            Debug.Log("All special movement abilities have been destroyed!");
+        }
+
         private void Update()
         {
             // Check if the state is good for move
@@ -48,6 +55,7 @@ namespace Player
             
             var ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
             if (!Physics.Raycast(ray, out var hit, 100f)) return;
+            
             var clickedPlace = hit.transform.GetComponent<Place>();
             if (clickedPlace is null)
                 return;
@@ -55,29 +63,59 @@ namespace Player
             // Check if clicked place is in possible moves
             if (!_possibleMoves.Exists(place => place.Id == clickedPlace.Id)) return;
             
-            // Transform player
-            Debug.Log("Clicked Place id: " + clickedPlace.Id);
-            GameBoard.Instance.AddPlayerMove(clickedPlace);
-            transform.position = clickedPlace.transform.position;
-            transform.position -= Vector3.forward * 2;
-            _currentPlace = clickedPlace;
+            // Check if player has enough food to move
+            if (!CanMove())
+                return;
             
-            // Change game state if move is successful
+            MoveToPlace(clickedPlace);
+        }
+        
+        private bool CanMove()
+        {
+            if (_statusController.Food >= 1)
+            {
+                return true;
+            }
+            else {
+                Debug.Log("Not enough food to move! You need at least 1 food to travel.");
+                return false;
+            }
+        }
+        
+        private void MoveToPlace(Place targetPlace)
+        {
+            Debug.Log($"Moving to place: {targetPlace.Id}");
+            
+            // Move the player visually
+            transform.position = targetPlace.transform.position - Vector3.forward * 2;
+            _currentPlace = targetPlace;
+            
+            
+            // Move consequence
+            _statusController.ApplyMoveConsequence();
+            // Draw and process a card from the place
+            CardData receivedCard = _currentPlace.DrawCard();
+            if (receivedCard)
+            {
+                _statusController.ProcessReceivedCard(receivedCard);
+            }
+
+            // Update game state
+            GameBoard.Instance.AddPlayerMove(targetPlace);
             GameBoard.Instance.ChangeRoundState();
-            
-            // Handle status consequences
-            _statusController.Consequence(_currentPlace);
         }
         
         private void CalculatePossibleMoves()
         {
-            // Clear previous possible moves
             _possibleMoves.Clear();
             
-            // Get moves from all enabled move types
             _possibleMoves.AddRange(_normalMove.GetPossibleMoves(_currentPlace));
-            _possibleMoves.AddRange(_knightMove.GetPossibleMoves(_currentPlace));
-            _possibleMoves.AddRange(_doubleMove.GetPossibleMoves(_currentPlace));
+            
+            if (_knightMove.IsEnabled)
+                _possibleMoves.AddRange(_knightMove.GetPossibleMoves(_currentPlace));
+                
+            if (_doubleMove.IsEnabled)
+                _possibleMoves.AddRange(_doubleMove.GetPossibleMoves(_currentPlace));
         }
     }
     

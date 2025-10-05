@@ -21,6 +21,7 @@ namespace Player
         private void Awake()
         {
             _currentPlace = initializedPlace;
+            initializedPlace.ShowCategoryColor();
             _statusController = GetComponent<PlayerStatusController>();
             
             // Initialize move types
@@ -64,13 +65,13 @@ namespace Player
             if (!_possibleMoves.Exists(place => place.Id == clickedPlace.Id)) return;
             
             // Check if player has enough food to move
-            if (!CanMove())
+            if (!HasEnoughFoodToMove())
                 return;
             
             MoveToPlace(clickedPlace);
         }
         
-        private bool CanMove()
+        private bool HasEnoughFoodToMove()
         {
             if (_statusController.Food >= 1)
             {

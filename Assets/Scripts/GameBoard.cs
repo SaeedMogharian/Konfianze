@@ -3,7 +3,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using GamePlace;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 public class GameBoard : MonoBehaviour
 {
@@ -26,6 +25,7 @@ public class GameBoard : MonoBehaviour
     public void AddPlayerMove(Place newPlace)
     {
         playerMoves.Add(newPlace);
+        newPlace.ShowCategoryColor();
     }
 
     private void Awake()
@@ -39,7 +39,7 @@ public class GameBoard : MonoBehaviour
             Destroy(this);
         }
 
-        var boardPosition = transform.position;
+        // var boardPosition = transform.position;
 
     }
 
@@ -54,8 +54,8 @@ public class GameBoard : MonoBehaviour
 
 public enum RoundState
 {
-    Guidance, 
-    AbilityAppliance,
+    // Guidance, 
+    // AbilityAppliance,
     Choose,
-    Consequences,
+    // Consequences,
 }

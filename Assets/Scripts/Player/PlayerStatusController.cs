@@ -1,7 +1,7 @@
 using System;
-using GamePlace;
 using UnityEngine;
 using Card;
+using System.Collections;
 
 namespace Player
 {
@@ -23,14 +23,69 @@ namespace Player
         private PlayerMoveController _moveController;
         private PlayerAbilityController _abilityController;
         
+        private Coroutine _countdownCoroutine;
+        private bool _isTimerRunning = false;
+        
         private void Awake()
         {
             food = 3;
             health = 100;
             time = 120;
             
+            StartTimer();
+            
             _moveController = GetComponent<PlayerMoveController>();
             _abilityController = GetComponent<PlayerAbilityController>();
+        }
+        
+        public void StartTimer()
+        {
+            if (!_isTimerRunning)
+            {
+                _isTimerRunning = true;
+                _countdownCoroutine = StartCoroutine(CountdownTimer());
+            }
+        }
+
+        public void StopTimer()
+        {
+            if (_countdownCoroutine != null)
+            {
+                StopCoroutine(_countdownCoroutine);
+                _countdownCoroutine = null;
+            }
+            _isTimerRunning = false;
+        }
+
+        public void ResetTimer(int newTime = 120)
+        {
+            StopTimer();
+            time = newTime;
+            OnTimeChanged?.Invoke(time);
+            StartTimer();
+        }
+
+        private IEnumerator CountdownTimer()
+        {
+            while (time > 0 && _isTimerRunning)
+            {
+                yield return new WaitForSeconds(1f);
+                time--;
+                OnTimeChanged?.Invoke(time);
+                
+                // Optional: Add game over logic when time runs out
+                if (time <= 0)
+                {
+                    TimeRunOut();
+                }
+            }
+        }
+
+        private void TimeRunOut()
+        {
+            Debug.Log("Time's up! Game over!");
+            // Add your game over logic here
+            // For example: GameBoard.Instance.ChangeRoundState() to a GameOver state
         }
 
         public void ApplyMoveConsequence()
@@ -44,7 +99,7 @@ namespace Player
             else
             {
                 Debug.LogWarning("Tried to consume food for movement but player has no food!");
-                // OnFoodChanged?.Invoke(food);
+                OnFoodChanged?.Invoke(food);
             }
 
         }

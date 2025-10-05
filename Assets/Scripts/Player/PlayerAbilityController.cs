@@ -10,6 +10,7 @@ namespace Player
    
         // A list to hold vision cards for later use
         private List<VisionAbilityCardData> _heldVisionCards = new List<VisionAbilityCardData>();
+        public List<VisionAbilityCardData> HeldVisionCards => new List<VisionAbilityCardData>(_heldVisionCards);
 
         public void AddVisionCard(VisionAbilityCardData card)
         {
@@ -17,14 +18,25 @@ namespace Player
             Debug.Log($"Added {card.cardName} to hand. You can use it during the Ability Appliance stage.");
         }
 
-        // You would call this method from your UI during the AbilityAppliance stage
+        // A public method to use a card by its index in the list
+        public void UseVisionCard(int cardIndex)
+        {
+            if (cardIndex >= 0 && cardIndex < _heldVisionCards.Count)
+            {
+                VisionAbilityCardData cardToUse = _heldVisionCards[cardIndex];
+                Debug.Log($"Using vision card: {cardToUse.visionType}");
+                // TODO: Implement the card's specific game effect
+                _heldVisionCards.RemoveAt(cardIndex);
+            }
+        }
+
+        // Optional: A method to use a specific card object
         public void UseVisionCard(VisionAbilityCardData cardToUse)
         {
             if (_heldVisionCards.Contains(cardToUse))
             {
-                // TODO: Implement the logic for what happens when a vision card is used.
-                // For example, enable a UI mode to click on a Place or Guide.
                 Debug.Log($"Using vision card: {cardToUse.visionType}");
+                // TODO: Implement the card's specific game effect
                 _heldVisionCards.Remove(cardToUse);
             }
         }

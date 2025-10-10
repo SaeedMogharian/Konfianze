@@ -6,6 +6,37 @@ using UnityEngine;
 
 namespace __Konfianze_specific.ConnectionUtilities.Scripts
 {
+    public enum PlayerRole
+    {
+        A,
+        B,
+        C,
+        Unknown
+    }
+
+    public sealed class MatchFoundInfo
+    {
+        public string MatchId;
+        public PlayerRole AssignedRole = PlayerRole.Unknown;
+    }
+
+    public sealed class ChatEnvelope
+    {
+        public string MatchId;
+        public string SenderUserId;
+        public string Text;
+        public string Tag; // مثلا "system" یا "table"
+        public bool IsSystem; // true برای پیام سیستمی
+        public long UnixTimeMs;
+    }
+
+    public sealed class MatchStateEnvelope
+    {
+        public long OpCode; // به OpCodes رجوع کن
+        public string Json; // Payload به صورت JSON
+        public byte[] Binary; // اگر خواستی باینری بفرستی
+    }
+
     public class ConnectionController : MonoBehaviour
     {
         // TODO: All except should fire releated events
@@ -85,7 +116,7 @@ namespace __Konfianze_specific.ConnectionUtilities.Scripts
                 Debug.LogError($"Error getting account {e.Message}");
             }
         }
-        
+
         private void HandleMessageReceived(IApiChannelMessage message)
         {
             OnNewMessageReceived?.Invoke(message.Content);

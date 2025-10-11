@@ -69,6 +69,12 @@ namespace Player
             // Calculate and show possible moves
             CalculatePossibleMoves();
             
+            // Light Up possible places
+            foreach (var possiblePlace in _possibleMoves)
+            {
+                possiblePlace.LightUp();
+            }
+            
             // Get Mouse Click
             if (!Mouse.current.leftButton.wasPressedThisFrame) return;
             
@@ -106,7 +112,15 @@ namespace Player
             transform.position = targetPlace.transform.position - Vector3.forward * 2;
             _currentPlace = targetPlace;
             
+            // Update game state
+            GameBoard.Instance.AddPlayerMove(targetPlace);
+            GameBoard.Instance.ChangeRoundState();
             
+            //Light Off possible places
+            foreach (var possiblePlace in _possibleMoves)
+            {
+                possiblePlace.LightOff();
+            }
             // Move consequence
             _statusController.ApplyMoveConsequence();
             // Draw and process a card from the place
@@ -115,10 +129,6 @@ namespace Player
             {
                 _statusController.ProcessReceivedCard(receivedCard);
             }
-
-            // Update game state
-            GameBoard.Instance.AddPlayerMove(targetPlace);
-            GameBoard.Instance.ChangeRoundState();
         }
         
         private void CalculatePossibleMoves()

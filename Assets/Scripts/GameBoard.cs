@@ -50,10 +50,14 @@ public class GameBoard : MonoBehaviour
             ChangeRoundState();
         }
 
-        foreach (var place in playerMoves.Where(place => place != null))
+        if (state == RoundState.Consequences)
         {
-            place.ShowCategoryColor();
+            foreach (var place in playerMoves.Where(place => place))
+            {
+                place.ShowCategoryColor();
+            }
         }
+        
     }
 }
 
@@ -62,5 +66,5 @@ public enum RoundState
     // Guidance, 
     // AbilityAppliance,
     Choose,
-    // Consequences,
+    Consequences,
 }

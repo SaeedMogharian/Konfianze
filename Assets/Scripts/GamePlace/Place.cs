@@ -8,6 +8,8 @@ namespace GamePlace
     {
         [SerializeField] private int id;
         public int Id => id;
+        // Coloring 
+        private Material _material; // Cache the material
         
         // Define the color dictionary for categories
         private static readonly Dictionary<PlaceCategory, Color> CategoryColors = new Dictionary<PlaceCategory, Color>
@@ -29,6 +31,8 @@ namespace GamePlace
         [SerializeField] private Place downPlace;
         public Place DownPlace => downPlace;
         
+        
+        
         [SerializeField] private PlaceCategory category;
         public PlaceCategory Category => category;
         
@@ -45,8 +49,7 @@ namespace GamePlace
             return possibleCards[randomIndex];
         }
         
-        // Coloring 
-        private Material _material; // Cache the material
+        
 
         private void Start()
         {
@@ -75,7 +78,23 @@ namespace GamePlace
         {
             if (_material)
             {
-                
+                _material.color = Color.white;
+            }
+        }
+        
+        public void LightUp()
+        {
+            if (_material)
+            {
+                // _material = new Color(0.95f, 1f, 0.47f);
+            }
+        }
+        
+        public void LightOff()
+        {
+            if (_material)
+            {
+                // _material.color = Color.white;
             }
         }
     }

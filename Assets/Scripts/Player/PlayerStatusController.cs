@@ -5,6 +5,7 @@ using System.Collections;
 
 namespace Player
 {
+    // [RequireComponent(typeof(PlayerMoveController))]
     public class PlayerStatusController : MonoBehaviour
     {
         [SerializeField] private int food;
@@ -18,6 +19,8 @@ namespace Player
         private Coroutine _countdownCoroutine;
         private bool _isTimerRunning = false;
         
+        // private PlayerMoveController _moveController;
+        
         private void Awake()
         {
             food = 3;
@@ -25,8 +28,22 @@ namespace Player
             time = 120;
             
             StartTimer();
+            // _moveController = GetComponent<PlayerMoveController>();
         }
-        
+
+        private void Update()
+        {
+            // Check for Game Over
+            if (food < 1) // time , health
+            {
+                Debug.Log("food is less than 1 -- Game Over");
+                StopTimer();
+                // Invoke Game over
+            }
+            
+            // Check for win
+        }
+
         public void StartTimer()
         {
             if (!_isTimerRunning)

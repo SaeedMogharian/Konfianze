@@ -17,8 +17,9 @@ namespace Player
         
         private Coroutine _countdownCoroutine;
         private bool _isTimerRunning = false;
-        private bool _isGameOver = false; // NEW: Track game over state
+        private bool _isGameOver = false;
         public bool IsGameOver() => _isGameOver;
+        private bool _isGameWon = false; // NEW: Track win state
         
         private void Awake()
         {
@@ -31,8 +32,8 @@ namespace Player
 
         private void Update()
         {
-            // Don't process anything if game is over
-            if (_isGameOver) return;
+            // Don't process anything if game is over OR won
+            if (_isGameOver || _isGameWon) return;
 
             // Check for Game Over conditions
             if (food <= 0 || health <= 0 || time <= 0) 
@@ -41,10 +42,19 @@ namespace Player
             }
         }
 
-        // NEW: Method to trigger game over
+        // NEW: Handle game win event
+        private void HandleGameWin()
+        {
+            if (_isGameOver || _isGameWon) return;
+            
+            _isGameWon = true;
+            Debug.Log("Victory! Game Won!");
+            StopTimer();
+        }
+
         private void TriggerGameOver(string reason)
         {
-            if (_isGameOver) return; // Prevent multiple triggers
+            if (_isGameOver || _isGameWon) return;
             
             _isGameOver = true;
             Debug.Log(reason);
@@ -55,7 +65,7 @@ namespace Player
 
         public void StartTimer()
         {
-            if (!_isTimerRunning && !_isGameOver)
+            if (!_isTimerRunning && !_isGameOver && !_isGameWon)
             {
                 _isTimerRunning = true;
                 _countdownCoroutine = StartCoroutine(CountdownTimer());
@@ -74,7 +84,7 @@ namespace Player
 
         public void ResetTimer(int newTime = 120)
         {
-            if (_isGameOver) return; // NEW: Don't reset if game over
+            if (_isGameOver || _isGameWon) return;
             
             StopTimer();
             time = newTime;
@@ -84,7 +94,7 @@ namespace Player
 
         private IEnumerator CountdownTimer()
         {
-            while (time > 0 && _isTimerRunning && !_isGameOver) // NEW: Added game over check
+            while (time > 0 && _isTimerRunning && !_isGameOver && !_isGameWon)
             {
                 yield return new WaitForSeconds(1f);
                 time--;
@@ -108,7 +118,7 @@ namespace Player
 
         public void ApplyMoveConsequence()
         {
-            if (_isGameOver) return; // NEW: Don't process if game over
+            if (_isGameOver || _isGameWon) return;
             
             if (food > 0)
             {
@@ -125,7 +135,7 @@ namespace Player
         
         public void ProcessReceivedCard(CardData card)
         {
-            if (card is null || _isGameOver) return; // NEW: Don't process if game over
+            if (card is null || _isGameOver || _isGameWon) return;
 
             Debug.Log($"Processing received card: {card.cardName}");
 
@@ -151,7 +161,7 @@ namespace Player
         
         private void ApplyResourceCard(ResourceCardData resourceCard)
         {
-            if (_isGameOver) return; // NEW: Don't process if game over
+            if (_isGameOver || _isGameWon) return;
             
             if (resourceCard.healthChange != 0)
             {
@@ -174,20 +184,31 @@ namespace Player
         
         private void ApplyMoveAbilityCard(MoveAbilityCardData moveCard)
         {
-            if (_isGameOver) return; // NEW: Don't process if game over
+            if (_isGameOver || _isGameWon) return;
             PlayerEvents.TriggerMoveAbilityEnabled(moveCard.moveType);
         }
         
         private void ApplyVisionAbilityCard(VisionAbilityCardData visionCard)
         {
-            if (_isGameOver) return; // NEW: Don't process if game over
+            if (_isGameOver || _isGameWon) return;
             PlayerEvents.TriggerVisionAbilityAdded(visionCard);
         }
         
         private void ApplyDestroyAllAbilitiesCard()
         {
-            if (_isGameOver) return; // NEW: Don't process if game over
+            if (_isGameOver || _isGameWon) return;
             PlayerEvents.TriggerAllAbilitiesDestroyed();
+        }
+
+        // NEW: Subscribe to events
+        private void OnEnable()
+        {
+            PlayerEvents.OnGameWin += HandleGameWin;
+        }
+
+        private void OnDisable()
+        {
+            PlayerEvents.OnGameWin -= HandleGameWin;
         }
 
         private void OnDestroy()

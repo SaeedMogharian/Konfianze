@@ -18,7 +18,8 @@ namespace Player
         private NormalMove _normalMove;
         private KnightMove _knightMove;
         private DoubleMove _doubleMove;
-        private bool _isGameOver = false; // NEW: Track game over state
+        private bool _isGameOver = false;
+        private bool _isGameWon = false; // NEW: Track win state
 
         private void Awake()
         {
@@ -36,10 +37,25 @@ namespace Player
             // Subscribe to events
             PlayerEvents.OnMoveAbilityEnabled += HandleMoveAbilityEnabled;
             PlayerEvents.OnAllAbilitiesDestroyed += DisableAllSpecialMoves;
-            PlayerEvents.OnGameOver += HandleGameOver; // NEW: Subscribe to game over
+            PlayerEvents.OnGameOver += HandleGameOver;
+            PlayerEvents.OnGameWin += HandleGameWin; // NEW: Subscribe to win event
         }
         
-        // NEW: Handle game over event
+        // NEW: Handle game win event
+        private void HandleGameWin()
+        {
+            _isGameWon = true;
+            
+            // Light off all possible moves
+            foreach (var possiblePlace in _possibleMoves)
+            {
+                possiblePlace.LightOff();
+            }
+            _possibleMoves.Clear();
+            
+            Debug.Log("Player movement disabled - Game Won!");
+        }
+        
         private void HandleGameOver()
         {
             _isGameOver = true;
@@ -59,12 +75,13 @@ namespace Player
             // Unsubscribe from events
             PlayerEvents.OnMoveAbilityEnabled -= HandleMoveAbilityEnabled;
             PlayerEvents.OnAllAbilitiesDestroyed -= DisableAllSpecialMoves;
-            PlayerEvents.OnGameOver -= HandleGameOver; // NEW: Unsubscribe
+            PlayerEvents.OnGameOver -= HandleGameOver;
+            PlayerEvents.OnGameWin -= HandleGameWin; // NEW: Unsubscribe
         }
 
         private void HandleMoveAbilityEnabled(MoveAbilityCardData.MoveType moveType)
         {
-            if (_isGameOver) return; // NEW: Don't process if game over
+            if (_isGameOver || _isGameWon) return; // NEW: Don't process if game over OR won
             
             switch (moveType)
             {
@@ -82,7 +99,7 @@ namespace Player
         
         private void DisableAllSpecialMoves()
         {
-            if (_isGameOver) return; // NEW: Don't process if game over
+            if (_isGameOver || _isGameWon) return; // NEW: Don't process if game over OR won
             
             _knightMove.IsEnabled = false;
             _doubleMove.IsEnabled = false;
@@ -91,8 +108,8 @@ namespace Player
 
         private void Update()
         {
-            // NEW: Don't process anything if game is over
-            if (_isGameOver) return;
+            // NEW: Don't process anything if game is over OR won
+            if (_isGameOver || _isGameWon) return;
             
             // Check if the state is good for move
             if (GameBoard.Instance.State != RoundState.Choose) return;
@@ -137,7 +154,7 @@ namespace Player
         
         private void MoveToPlace(Place targetPlace)
         {
-            if (_isGameOver) return; // NEW: Don't process if game over
+            if (_isGameOver || _isGameWon) return; // NEW: Don't process if game over OR won
             
             Debug.Log($"Moving to place: {targetPlace.Id}");
             
@@ -150,23 +167,39 @@ namespace Player
             {
                 possiblePlace.LightOff();
             }
+            
+            // Update game state
+            GameBoard.Instance.AddPlayerMove(targetPlace);
+            GameBoard.Instance.ChangeRoundState();
+            
             // Move consequence
             _statusController.ApplyMoveConsequence();
+            
+            // NEW: Check for win condition - if reached End category place
+            if (targetPlace.Category == PlaceCategory.End)
+            {
+                TriggerGameWin();
+                return; // Stop further processing since game is won
+            }
+            
             // Draw and process a card from the place
             CardData receivedCard = _currentPlace.DrawCard();
             if (receivedCard)
             {
                 _statusController.ProcessReceivedCard(receivedCard);
             }
-            
-            // Update game state
-            GameBoard.Instance.AddPlayerMove(targetPlace);
-            GameBoard.Instance.ChangeRoundState();
+        }
+        
+        // NEW: Method to trigger game win
+        private void TriggerGameWin()
+        {
+            Debug.Log("Game Won! Reached End category place!");
+            PlayerEvents.TriggerGameWin();
         }
         
         private void CalculatePossibleMoves()
         {
-            if (_isGameOver) return; // NEW: Don't process if game over
+            if (_isGameOver || _isGameWon) return; // NEW: Don't process if game over OR won
             
             _possibleMoves.Clear();
             

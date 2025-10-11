@@ -50,7 +50,7 @@ public class GameBoard : MonoBehaviour
             ChangeRoundState();
         }
 
-        if (state == RoundState.Consequences)
+        if (state is RoundState.Consequences or RoundState.Guidance)
         {
             foreach (var place in playerMoves.Where(place => place))
             {
@@ -63,7 +63,7 @@ public class GameBoard : MonoBehaviour
 
 public enum RoundState
 {
-    // Guidance, 
+    Guidance, 
     // AbilityAppliance,
     Choose,
     Consequences,

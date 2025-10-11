@@ -5,7 +5,6 @@ using System.Collections;
 
 namespace Player
 {
-    // [RequireComponent(typeof(PlayerMoveController))]
     public class PlayerStatusController : MonoBehaviour
     {
         [SerializeField] private int food;
@@ -18,8 +17,8 @@ namespace Player
         
         private Coroutine _countdownCoroutine;
         private bool _isTimerRunning = false;
-        
-        // private PlayerMoveController _moveController;
+        private bool _isGameOver = false; // NEW: Track game over state
+        public bool IsGameOver() => _isGameOver;
         
         private void Awake()
         {
@@ -28,25 +27,35 @@ namespace Player
             time = 120;
             
             StartTimer();
-            // _moveController = GetComponent<PlayerMoveController>();
         }
 
         private void Update()
         {
-            // Check for Game Over
-            if (food < 1) // time , health
+            // Don't process anything if game is over
+            if (_isGameOver) return;
+
+            // Check for Game Over conditions
+            if (food <= 0 || health <= 0 || time <= 0) 
             {
-                Debug.Log("food is less than 1 -- Game Over");
-                StopTimer();
-                // Invoke Game over
+                TriggerGameOver("Game Over - " + (food <= 0 ? "Starved to death!" : health <= 0 ? "Health depleted!" : "Run out of time!"));
             }
+        }
+
+        // NEW: Method to trigger game over
+        private void TriggerGameOver(string reason)
+        {
+            if (_isGameOver) return; // Prevent multiple triggers
             
-            // Check for win
+            _isGameOver = true;
+            Debug.Log(reason);
+            
+            StopTimer();
+            PlayerEvents.TriggerGameOver();
         }
 
         public void StartTimer()
         {
-            if (!_isTimerRunning)
+            if (!_isTimerRunning && !_isGameOver)
             {
                 _isTimerRunning = true;
                 _countdownCoroutine = StartCoroutine(CountdownTimer());
@@ -65,6 +74,8 @@ namespace Player
 
         public void ResetTimer(int newTime = 120)
         {
+            if (_isGameOver) return; // NEW: Don't reset if game over
+            
             StopTimer();
             time = newTime;
             PlayerEvents.TriggerTimeChanged(time);
@@ -73,7 +84,7 @@ namespace Player
 
         private IEnumerator CountdownTimer()
         {
-            while (time > 0 && _isTimerRunning)
+            while (time > 0 && _isTimerRunning && !_isGameOver) // NEW: Added game over check
             {
                 yield return new WaitForSeconds(1f);
                 time--;
@@ -81,19 +92,24 @@ namespace Player
                 
                 if (time <= 0)
                 {
-                    TimeRunOut();
+                    TriggerGameOver("Game Over - " + "Run out of time!");
                 }
             }
         }
 
-        private void TimeRunOut()
-        {
-            Debug.Log("Time's up! Game over!");
-            PlayerEvents.TriggerTimeRunOut();
-        }
+        // private void TimeRunOut()
+        // {
+        //     if (_isGameOver) return; // NEW: Don't trigger if already game over
+        //     
+        //     Debug.Log("Time's up! Game over!");
+        //     PlayerEvents.TriggerTimeRunOut();
+        //     TriggerGameOver("Time's up!");
+        // }
 
         public void ApplyMoveConsequence()
         {
+            if (_isGameOver) return; // NEW: Don't process if game over
+            
             if (food > 0)
             {
                 food -= 1;
@@ -109,7 +125,7 @@ namespace Player
         
         public void ProcessReceivedCard(CardData card)
         {
-            if (card is null) return;
+            if (card is null || _isGameOver) return; // NEW: Don't process if game over
 
             Debug.Log($"Processing received card: {card.cardName}");
 
@@ -135,6 +151,8 @@ namespace Player
         
         private void ApplyResourceCard(ResourceCardData resourceCard)
         {
+            if (_isGameOver) return; // NEW: Don't process if game over
+            
             if (resourceCard.healthChange != 0)
             {
                 health += resourceCard.healthChange;
@@ -156,16 +174,19 @@ namespace Player
         
         private void ApplyMoveAbilityCard(MoveAbilityCardData moveCard)
         {
+            if (_isGameOver) return; // NEW: Don't process if game over
             PlayerEvents.TriggerMoveAbilityEnabled(moveCard.moveType);
         }
         
         private void ApplyVisionAbilityCard(VisionAbilityCardData visionCard)
         {
+            if (_isGameOver) return; // NEW: Don't process if game over
             PlayerEvents.TriggerVisionAbilityAdded(visionCard);
         }
         
         private void ApplyDestroyAllAbilitiesCard()
         {
+            if (_isGameOver) return; // NEW: Don't process if game over
             PlayerEvents.TriggerAllAbilitiesDestroyed();
         }
 

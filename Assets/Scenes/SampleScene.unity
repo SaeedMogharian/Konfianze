@@ -215,7 +215,6 @@ MonoBehaviour:
   rightPlace: {fileID: 19606978}
   upPlace: {fileID: 0}
   downPlace: {fileID: 491895084}
-  endpoint: 0
   category: 0
   possibleCards: []
 --- !u!1001 &19606975
@@ -314,8 +313,7 @@ MonoBehaviour:
   rightPlace: {fileID: 0}
   upPlace: {fileID: 0}
   downPlace: {fileID: 1227335144}
-  endpoint: 1
-  category: 1
+  category: 4
   possibleCards:
   - {fileID: 11400000, guid: b163a39a281034174a2162a4966eeeed, type: 2}
   - {fileID: 11400000, guid: a41013b60e6524bf0b124cc6ea3afdfa, type: 2}
@@ -471,7 +469,6 @@ MonoBehaviour:
   rightPlace: {fileID: 1227335144}
   upPlace: {fileID: 8024290}
   downPlace: {fileID: 825467303}
-  endpoint: 0
   category: 1
   possibleCards:
   - {fileID: 11400000, guid: c9e643b67eaab467fa456d1c152f6adf, type: 2}
@@ -793,7 +790,6 @@ MonoBehaviour:
   rightPlace: {fileID: 1875795737}
   upPlace: {fileID: 491895084}
   downPlace: {fileID: 0}
-  endpoint: 0
   category: 2
   possibleCards:
   - {fileID: 11400000, guid: a66fc47fc783a4b76baaa37b05396107, type: 2}
@@ -824,7 +820,6 @@ MonoBehaviour:
   rightPlace: {fileID: 8024290}
   upPlace: {fileID: 0}
   downPlace: {fileID: 1764569070}
-  endpoint: 0
   category: 0
   possibleCards: []
 --- !u!1001 &1227335141
@@ -923,7 +918,6 @@ MonoBehaviour:
   rightPlace: {fileID: 0}
   upPlace: {fileID: 19606978}
   downPlace: {fileID: 1875795737}
-  endpoint: 0
   category: 0
   possibleCards: []
 --- !u!1 &1580383604
@@ -1152,7 +1146,6 @@ MonoBehaviour:
   rightPlace: {fileID: 825467303}
   upPlace: {fileID: 1764569070}
   downPlace: {fileID: 0}
-  endpoint: 0
   category: 0
   possibleCards: []
 --- !u!1001 &1764569067
@@ -1251,7 +1244,6 @@ MonoBehaviour:
   rightPlace: {fileID: 491895084}
   upPlace: {fileID: 1135502018}
   downPlace: {fileID: 1654440920}
-  endpoint: 0
   category: 3
   possibleCards:
   - {fileID: 11400000, guid: 80694f7d77fc74ff5824ac4e8fc684b3, type: 2}
@@ -1352,7 +1344,6 @@ MonoBehaviour:
   rightPlace: {fileID: 0}
   upPlace: {fileID: 1227335144}
   downPlace: {fileID: 0}
-  endpoint: 0
   category: 0
   possibleCards: []
 --- !u!1001 &8457902122079353547

@@ -1,5 +1,6 @@
 using UnityEngine;
 using Card;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace GamePlace
@@ -8,9 +9,11 @@ namespace GamePlace
     {
         [SerializeField] private int id;
         public int Id => id;
+
         // Coloring 
-        private Material _material; // Cache the material
-        
+        private Material _material;
+        private bool _shown = false;
+
         // Define the color dictionary for categories
         private static readonly Dictionary<PlaceCategory, Color> CategoryColors = new Dictionary<PlaceCategory, Color>
         {
@@ -20,7 +23,7 @@ namespace GamePlace
             { PlaceCategory.Ability, new Color(0.6784f, 0.8471f, 0.9020f) }, // light-blue
             { PlaceCategory.Danger, new Color(1f, 0.6471f, 0f) } // orange
         };
-        
+
         // Place alignment
         [SerializeField] private Place leftPlace;
         public Place LeftPlace => leftPlace;
@@ -30,26 +33,26 @@ namespace GamePlace
         public Place UpPlace => upPlace;
         [SerializeField] private Place downPlace;
         public Place DownPlace => downPlace;
-        
-        
-        
+
+
+
         [SerializeField] private PlaceCategory category;
         public PlaceCategory Category => category;
-        
+
         // Serialized card pool for this place
         [SerializeField] private List<CardData> possibleCards;
-        
-        
+
+
         public CardData DrawCard()
         {
             if (possibleCards == null || possibleCards.Count == 0)
                 return null;
-                
+
             int randomIndex = Random.Range(0, possibleCards.Count);
             return possibleCards[randomIndex];
         }
-        
-        
+
+
 
         private void Start()
         {
@@ -57,8 +60,7 @@ namespace GamePlace
             Renderer colorRenderer = GetComponent<Renderer>();
             if (colorRenderer)
             {
-                _material = colorRenderer.material; // Use material to avoid affecting other objects
-                SetToDefaultColor(); // Initialize to white
+                _material = colorRenderer.material;
             }
             else
             {
@@ -68,8 +70,9 @@ namespace GamePlace
 
         public void ShowCategoryColor()
         {
-            if (_material) 
+            if (_material)
             {
+                _shown = true;
                 _material.color = CategoryColors[category];
             }
         }
@@ -81,29 +84,36 @@ namespace GamePlace
                 _material.color = Color.white;
             }
         }
-        
+
         public void LightUp()
         {
-            if (_material)
-            {
-                // _material = new Color(0.95f, 1f, 0.47f);
-            }
+            if (!_material) return;
+
+            Color flashColor = new Color(0.95f, 1f, 0.47f);
+            _material.color = flashColor;
         }
-        
+
         public void LightOff()
         {
-            if (_material)
+            if (!_material) return;
+            
+            if (_shown)
             {
-                // _material.color = Color.white;
+                ShowCategoryColor();
             }
+            else
+            {
+                SetToDefaultColor();
+            }
+           
         }
     }
-
+    
     public enum PlaceCategory
     {
-        Empty, 
-        Resource, 
-        Ability, 
+        Empty,
+        Resource,
+        Ability,
         Danger,
         End
     }

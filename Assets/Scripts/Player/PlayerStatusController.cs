@@ -5,7 +5,6 @@ using System.Collections;
 
 namespace Player
 {
-    [RequireComponent(typeof(PlayerMoveController), typeof(PlayerAbilityController))]
     public class PlayerStatusController : MonoBehaviour
     {
         [SerializeField] private int food;
@@ -15,13 +14,6 @@ namespace Player
         public int Food => food;
         public int Health => health;
         public int Time => time;
-        
-        public event Action<int> OnFoodChanged;
-        public event Action<int> OnHealthChanged;
-        public event Action<int> OnTimeChanged;
-        
-        private PlayerMoveController _moveController;
-        private PlayerAbilityController _abilityController;
         
         private Coroutine _countdownCoroutine;
         private bool _isTimerRunning = false;
@@ -33,9 +25,6 @@ namespace Player
             time = 120;
             
             StartTimer();
-            
-            _moveController = GetComponent<PlayerMoveController>();
-            _abilityController = GetComponent<PlayerAbilityController>();
         }
         
         public void StartTimer()
@@ -61,7 +50,7 @@ namespace Player
         {
             StopTimer();
             time = newTime;
-            OnTimeChanged?.Invoke(time);
+            PlayerEvents.TriggerTimeChanged(time);
             StartTimer();
         }
 
@@ -71,9 +60,8 @@ namespace Player
             {
                 yield return new WaitForSeconds(1f);
                 time--;
-                OnTimeChanged?.Invoke(time);
+                PlayerEvents.TriggerTimeChanged(time);
                 
-                // Optional: Add game over logic when time runs out
                 if (time <= 0)
                 {
                     TimeRunOut();
@@ -84,8 +72,7 @@ namespace Player
         private void TimeRunOut()
         {
             Debug.Log("Time's up! Game over!");
-            // Add your game over logic here
-            // For example: GameBoard.Instance.ChangeRoundState() to a GameOver state
+            PlayerEvents.TriggerTimeRunOut();
         }
 
         public void ApplyMoveConsequence()
@@ -93,15 +80,14 @@ namespace Player
             if (food > 0)
             {
                 food -= 1;
-                OnFoodChanged?.Invoke(food);
+                PlayerEvents.TriggerFoodChanged(food);
                 Debug.Log($"Consumed 1 food for movement. Remaining food: {food}");
             }
             else
             {
                 Debug.LogWarning("Tried to consume food for movement but player has no food!");
-                OnFoodChanged?.Invoke(food);
+                PlayerEvents.TriggerFoodChanged(food);
             }
-
         }
         
         public void ProcessReceivedCard(CardData card)
@@ -121,8 +107,8 @@ namespace Player
                 case VisionAbilityCardData visionCard:
                     ApplyVisionAbilityCard(visionCard);
                     break;
-                case DestroyAllAbilitiesCardData destroyCard:
-                    ApplyDestroyAllAbilitiesCard(destroyCard);
+                case DestroyAllAbilitiesCardData:
+                    ApplyDestroyAllAbilitiesCard();
                     break;
                 default:
                     Debug.LogWarning($"Unknown card type: {card.GetType()}");
@@ -135,46 +121,40 @@ namespace Player
             if (resourceCard.healthChange != 0)
             {
                 health += resourceCard.healthChange;
-                OnHealthChanged?.Invoke(health);
+                PlayerEvents.TriggerHealthChanged(health);
             }
             
             if (resourceCard.foodChange != 0)
             {
                 food += resourceCard.foodChange;
-                OnFoodChanged?.Invoke(food);
+                PlayerEvents.TriggerFoodChanged(food);
             }
             
             if (resourceCard.timeChange != 0)
             {
                 time += resourceCard.timeChange;
-                OnTimeChanged?.Invoke(time);
+                PlayerEvents.TriggerTimeChanged(time);
             }
         }
         
         private void ApplyMoveAbilityCard(MoveAbilityCardData moveCard)
         {
-            switch (moveCard.moveType)
-            {
-                case MoveAbilityCardData.MoveType.Knight:
-                    _moveController.EnableKnightMove(true);
-                    break;
-                case MoveAbilityCardData.MoveType.Double:
-                    _moveController.EnableDoubleMove(true);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            PlayerEvents.TriggerMoveAbilityEnabled(moveCard.moveType);
         }
         
         private void ApplyVisionAbilityCard(VisionAbilityCardData visionCard)
         {
-            _abilityController.AddVisionCard(visionCard);
+            PlayerEvents.TriggerVisionAbilityAdded(visionCard);
         }
         
-        private void ApplyDestroyAllAbilitiesCard(DestroyAllAbilitiesCardData destroyCard)
+        private void ApplyDestroyAllAbilitiesCard()
         {
-            _moveController.DisableAllSpecialMoves();
-            _abilityController.DestroyAllVisionAbilities();
+            PlayerEvents.TriggerAllAbilitiesDestroyed();
+        }
+
+        private void OnDestroy()
+        {
+            StopTimer();
         }
     }
 }

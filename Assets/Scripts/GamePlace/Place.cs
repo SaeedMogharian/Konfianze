@@ -12,7 +12,8 @@ namespace GamePlace
         // Define the color dictionary for categories
         private static readonly Dictionary<PlaceCategory, Color> CategoryColors = new Dictionary<PlaceCategory, Color>
         {
-            { PlaceCategory.Empty, Color.gray },
+            { PlaceCategory.End, Color.black },
+            { PlaceCategory.Empty, Color.lightGray },
             { PlaceCategory.Resource, new Color(0.5647f, 0.9333f, 0.5647f) }, // light-green
             { PlaceCategory.Ability, new Color(0.6784f, 0.8471f, 0.9020f) }, // light-blue
             { PlaceCategory.Danger, new Color(1f, 0.6471f, 0f) } // orange
@@ -27,9 +28,6 @@ namespace GamePlace
         public Place UpPlace => upPlace;
         [SerializeField] private Place downPlace;
         public Place DownPlace => downPlace;
-        
-        [SerializeField] private bool endpoint;
-        public bool Endpoint => endpoint;
         
         [SerializeField] private PlaceCategory category;
         public PlaceCategory Category => category;
@@ -87,6 +85,7 @@ namespace GamePlace
         Empty, 
         Resource, 
         Ability, 
-        Danger
+        Danger,
+        End
     }
 }

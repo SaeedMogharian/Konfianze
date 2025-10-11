@@ -6,6 +6,7 @@ using Card;
 
 namespace Player
 {
+    [RequireComponent(typeof(PlayerStatusController))]
     public class PlayerMoveController : MonoBehaviour
     {
         [SerializeField] private Place initializedPlace;
@@ -21,7 +22,8 @@ namespace Player
         private void Awake()
         {
             _currentPlace = initializedPlace;
-            initializedPlace.ShowCategoryColor();
+            GameBoard.Instance.AddPlayerMove(initializedPlace);
+            // initializedPlace.ShowCategoryColor();
             _statusController = GetComponent<PlayerStatusController>();
             
             // Initialize move types
@@ -30,16 +32,32 @@ namespace Player
             _doubleMove = new DoubleMove();
             
             _possibleMoves = new List<Place>();
+            
+            // Subscribe to events
+            PlayerEvents.OnMoveAbilityEnabled += HandleMoveAbilityEnabled;
+            PlayerEvents.OnAllAbilitiesDestroyed += DisableAllSpecialMoves;
         }
         
-        // Public methods to enable/disable special moves
-        public void EnableKnightMove(bool enable) => _knightMove.IsEnabled = enable;
-        public void EnableDoubleMove(bool enable) => _doubleMove.IsEnabled = enable;
-        
-        public void DisableAllSpecialMoves()
+        private void HandleMoveAbilityEnabled(MoveAbilityCardData.MoveType moveType)
         {
-            EnableKnightMove(false);
-            EnableDoubleMove(false);
+            switch (moveType)
+            {
+                case MoveAbilityCardData.MoveType.Knight:
+                    _knightMove.IsEnabled = true;
+                    break;
+                case MoveAbilityCardData.MoveType.Double:
+                    _doubleMove.IsEnabled = true;
+                    break;
+                default:
+                    Debug.LogWarning($"Unknown move type: {moveType}");
+                    break;
+            }
+        }
+        
+        private void DisableAllSpecialMoves()
+        {
+            _knightMove.IsEnabled = false;
+            _doubleMove.IsEnabled = false;
             Debug.Log("All special movement abilities have been destroyed!");
         }
 
@@ -62,10 +80,7 @@ namespace Player
                 return;
             
             // Check if clicked place is in possible moves
-            if (!_possibleMoves.Exists(place => place.Id == clickedPlace.Id)) return;
-            
-            // Check if player has enough food to move
-            if (!HasEnoughFoodToMove())
+            if (!_possibleMoves.Exists(place => place.Id == clickedPlace.Id) || !HasEnoughFoodToMove())
                 return;
             
             MoveToPlace(clickedPlace);

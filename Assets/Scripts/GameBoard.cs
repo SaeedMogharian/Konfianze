@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 using GamePlace;
 using UnityEngine.InputSystem;
 
@@ -25,7 +26,6 @@ public class GameBoard : MonoBehaviour
     public void AddPlayerMove(Place newPlace)
     {
         playerMoves.Add(newPlace);
-        newPlace.ShowCategoryColor();
     }
 
     private void Awake()
@@ -48,6 +48,11 @@ public class GameBoard : MonoBehaviour
         if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             ChangeRoundState();
+        }
+
+        foreach (var place in playerMoves.Where(place => place != null))
+        {
+            place.ShowCategoryColor();
         }
     }
 }

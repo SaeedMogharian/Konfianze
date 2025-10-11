@@ -315,8 +315,10 @@ MonoBehaviour:
   upPlace: {fileID: 0}
   downPlace: {fileID: 1227335144}
   endpoint: 1
-  category: 0
-  possibleCards: []
+  category: 1
+  possibleCards:
+  - {fileID: 11400000, guid: b163a39a281034174a2162a4966eeeed, type: 2}
+  - {fileID: 11400000, guid: a41013b60e6524bf0b124cc6ea3afdfa, type: 2}
 --- !u!1 &73491629
 GameObject:
   m_ObjectHideFlags: 0
@@ -792,8 +794,9 @@ MonoBehaviour:
   upPlace: {fileID: 491895084}
   downPlace: {fileID: 0}
   endpoint: 0
-  category: 0
-  possibleCards: []
+  category: 2
+  possibleCards:
+  - {fileID: 11400000, guid: a66fc47fc783a4b76baaa37b05396107, type: 2}
 --- !u!1 &1135502013 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7488190293868751333, guid: 17f3b1d956d2f4004a94b7a3f67b99fe, type: 3}
@@ -1038,8 +1041,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b24cbb33c52e4c118244a8ea1e8a436, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  food: 3
-  health: 100
+  food: 0
+  health: 0
   time: 0
 --- !u!114 &1580383609
 MonoBehaviour:
@@ -1249,8 +1252,10 @@ MonoBehaviour:
   upPlace: {fileID: 1135502018}
   downPlace: {fileID: 1654440920}
   endpoint: 0
-  category: 0
-  possibleCards: []
+  category: 3
+  possibleCards:
+  - {fileID: 11400000, guid: 80694f7d77fc74ff5824ac4e8fc684b3, type: 2}
+  - {fileID: 11400000, guid: c5f8f8be239f64f8c845a0e683464511, type: 2}
 --- !u!1001 &1875795734
 PrefabInstance:
   m_ObjectHideFlags: 0

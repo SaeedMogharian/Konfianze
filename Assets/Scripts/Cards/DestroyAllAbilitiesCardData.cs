@@ -1,8 +1,8 @@
 using UnityEngine;
 
-namespace Card
+namespace Cards
 {
-    [CreateAssetMenu(fileName = "New Destroy All Abilities Card", menuName = "Cards/Destroy Abilities")]
+    [CreateAssetMenu(fileName = "New Destroy All Abilities Cards", menuName = "Cards/Destroy Abilities")]
     public class DestroyAllAbilitiesCardData : CardData
     {
         // This card is a "flag" type. Its existence is its effect.

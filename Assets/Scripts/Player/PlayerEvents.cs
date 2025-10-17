@@ -1,7 +1,7 @@
 // PlayerEvents.cs
 using System;
 using UnityEngine;
-using Card;
+using Cards;
 
 namespace Player
 {

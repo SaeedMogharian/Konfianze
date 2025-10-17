@@ -2,9 +2,9 @@
 using Player;
 using UnityEngine;
 
-namespace Card
+namespace Cards
 {
-    [CreateAssetMenu(fileName = "New Resource Card", menuName = "Cards/Resource Card")]
+    [CreateAssetMenu(fileName = "New Resource Cards", menuName = "Cards/Resource Cards")]
     public class ResourceCardData : CardData
     {
         public int healthChange;

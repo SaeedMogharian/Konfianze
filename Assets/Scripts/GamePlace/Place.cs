@@ -1,7 +1,8 @@
 using UnityEngine;
-using Card;
+using Cards;
 using System.Collections;
 using System.Collections.Generic;
+using Guides;
 
 namespace GamePlace
 {
@@ -34,14 +35,15 @@ namespace GamePlace
         [SerializeField] private Place downPlace;
         public Place DownPlace => downPlace;
 
-
-
         [SerializeField] private PlaceCategory category;
         public PlaceCategory Category => category;
 
         // Serialized card pool for this place
         [SerializeField] private List<CardData> possibleCards;
 
+        // Guide system
+        private bool _isRevealedToPlayer = false;
+        public bool IsRevealedToPlayer => _isRevealedToPlayer;
 
         public CardData DrawCard()
         {
@@ -51,8 +53,6 @@ namespace GamePlace
             int randomIndex = Random.Range(0, possibleCards.Count);
             return possibleCards[randomIndex];
         }
-
-
 
         private void Start()
         {
@@ -74,6 +74,22 @@ namespace GamePlace
             {
                 _shown = true;
                 _material.color = CategoryColors[category];
+                _isRevealedToPlayer = true;
+            }
+        }
+
+        public void ShowCategoryColorForGuide(Guide guide)
+        {
+            if (_material && guide != null)
+            {
+                if (_isRevealedToPlayer || guide.CanSeeCategory(category))
+                {
+                    _material.color = CategoryColors[category];
+                }
+                else
+                {
+                    SetToDefaultColor();
+                }
             }
         }
 
@@ -105,8 +121,23 @@ namespace GamePlace
             {
                 SetToDefaultColor();
             }
-           
         }
+
+        // Method to check if a guide can see this place's category
+        // public bool IsVisibleToGuide(Guide guide)
+        // {
+        //     return _isRevealedToPlayer || (guide != null && guide.CanSeeCategory(category));
+        // }
+        //
+        // // Method to get the category for a specific guide (returns Unknown if not visible)
+        // public PlaceCategory GetCategoryForGuide(Guide guide)
+        // {
+        //     if (_isRevealedToPlayer || (guide != null && guide.CanSeeCategory(category)))
+        //     {
+        //         return category;
+        //     }
+        //     return PlaceCategory.Empty; // Return Empty as default "unknown" category
+        // }
     }
     
     public enum PlaceCategory

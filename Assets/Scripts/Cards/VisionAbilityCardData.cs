@@ -2,7 +2,7 @@ using UnityEngine;
 using Player;
 
 
-namespace Card
+namespace Cards
 {
     public enum VisionType
     {
@@ -10,7 +10,7 @@ namespace Card
         RevealGuideRole
     }
     
-    [CreateAssetMenu(fileName = "New Vision Ability Card", menuName = "Cards/Vision Ability Card")]
+    [CreateAssetMenu(fileName = "New Vision Ability Cards", menuName = "Cards/Vision Ability Cards")]
     public class VisionAbilityCardData : CardData
     {
         public VisionType visionType;

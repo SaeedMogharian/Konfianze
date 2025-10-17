@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-using Card;
+using Cards;
 using System.Collections;
 
 namespace Player

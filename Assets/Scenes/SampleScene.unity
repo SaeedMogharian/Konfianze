@@ -469,10 +469,9 @@ MonoBehaviour:
   rightPlace: {fileID: 1227335144}
   upPlace: {fileID: 8024290}
   downPlace: {fileID: 825467303}
-  category: 1
+  category: 2
   possibleCards:
-  - {fileID: 11400000, guid: c9e643b67eaab467fa456d1c152f6adf, type: 2}
-  - {fileID: 11400000, guid: 46b63c06373364df89818309bb15f77d, type: 2}
+  - {fileID: 11400000, guid: 8506f379c6fce4d3596550983ec81430, type: 2}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -792,7 +791,7 @@ MonoBehaviour:
   downPlace: {fileID: 0}
   category: 2
   possibleCards:
-  - {fileID: 11400000, guid: a66fc47fc783a4b76baaa37b05396107, type: 2}
+  - {fileID: 11400000, guid: e1cd80dc788e845b5accac360bd46295, type: 2}
 --- !u!1 &1135502013 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7488190293868751333, guid: 17f3b1d956d2f4004a94b7a3f67b99fe, type: 3}
@@ -820,8 +819,9 @@ MonoBehaviour:
   rightPlace: {fileID: 8024290}
   upPlace: {fileID: 0}
   downPlace: {fileID: 1764569070}
-  category: 0
-  possibleCards: []
+  category: 3
+  possibleCards:
+  - {fileID: 11400000, guid: 80694f7d77fc74ff5824ac4e8fc684b3, type: 2}
 --- !u!1001 &1227335141
 PrefabInstance:
   m_ObjectHideFlags: 0

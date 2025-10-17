@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using GamePlace;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Card;
+using Cards;
 
 namespace Player
 {

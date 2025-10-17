@@ -1,9 +1,9 @@
 using UnityEngine;
 using Player;
 
-namespace Card
+namespace Cards
 {
-    [CreateAssetMenu(fileName = "New Move Ability Card", menuName = "Cards/Move Ability Card")]
+    [CreateAssetMenu(fileName = "New Move Ability Cards", menuName = "Cards/Move Ability Cards")]
     public class MoveAbilityCardData : CardData
     {
         public enum MoveType { Knight, Double }

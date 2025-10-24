@@ -1,16 +1,30 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class ChatView : MonoBehaviour
+namespace __Lamboo_packages.Connection.Scripts
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [RequireComponent(typeof(ChatController))]
+    public class ChatView : MonoBehaviour
     {
-        
-    }
+        [SerializeField] private Transform contentParent;
+        [SerializeField] private MessageView messagePrefabe;
+        private ChatController _controller;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private void OnEnable()
+        {
+            _controller ??= GetComponent<ChatController>();
+            _controller.NewMessageReceived += HandleNewMessageReceived;
+        }
+
+        private void OnDisable()
+        {
+            _controller.NewMessageReceived -= HandleNewMessageReceived;
+        }
+
+        private void HandleNewMessageReceived(string obj)
+        {
+            var newInstance = Instantiate(messagePrefabe, contentParent);
+            newInstance.Setup(obj);
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace __Lamboo_packages.Connection.Scripts
         [SerializeField] private int port = 7350;
         [SerializeField] private string serverKey = "defaultkey";
 
-        [Tooltip("پیشوند اتاق چت مربوط به هر مچ")]
+        [Tooltip("ًRoom Prefix")]
         public string matchChatRoomPrefix = "match-";
 
         private IClient _client;
@@ -46,24 +46,14 @@ namespace __Lamboo_packages.Connection.Scripts
         public override async Task AuthenticatePhoneOtpAsync(string phone, string otpCode,
             CancellationToken ct = default)
         {
-            // var payload = new { phone, otp = otpCode }.ToJson();
-            // var rpc = await _client.RpcAsync("auth_phone_otp", payload, _session, ct);
-            // // فرض: RPC یک session token برمی‌گردونه (یا device link). بنا به پیاده‌سازی شما:
-            // // اگر RPC توکن بده:
-            // if (!string.IsNullOrEmpty(rpc.Payload))
-            // {
-            //     var obj = rpc.Payload.FromJson<PhoneAuthResponse>();
-            //     _session = Session.Restore(obj.sessionToken);
-            // }
-            //
-            // await Task.CompletedTask;
+            throw new NotImplementedException();
         }
 
         protected override async Task ConnectSocketAsync(CancellationToken ct = default)
         {
             if (_session == null || _session.IsExpired) throw new InvalidOperationException("Authenticate first.");
 
-            _socket = _client.NewSocket();
+            _socket = _client.NewSocket(useMainThread: true);
             _socket.Connected += OnConnected;
             _socket.Closed += () => OnDisconnected("closed");
             _socket.ReceivedError += OnError;
@@ -82,19 +72,15 @@ namespace __Lamboo_packages.Connection.Scripts
             _socket = null;
         }
 
-        public override async Task StartMatchmakingAsync(PlayerRole preferredRole, CancellationToken ct = default)
+        public override async Task StartMatchmakingAsync(CancellationToken ct = default)
         {
             EnsureSocket();
 
             const string query = "*";
-            const int minCount = 3;
+            const int minCount = 2;
             const int maxCount = 3;
-            var stringProps = new System.Collections.Generic.Dictionary<string, string>
-            {
-                { "preferredRole", preferredRole.ToString() }
-            };
 
-            await _socket.AddMatchmakerAsync(query, minCount, maxCount, stringProps);
+            await _socket.AddMatchmakerAsync(query, minCount, maxCount);
 
             await Task.CompletedTask;
         }
@@ -125,8 +111,10 @@ namespace __Lamboo_packages.Connection.Scripts
             _chatChannel =
                 await _socket.JoinChatAsync(roomName, ChannelType.Room, persistence: false, hidden: false);
             _chatChannelId = _chatChannel.Id;
+            Debug.LogError("--- Join Mathc Chat!");
 
             await Task.CompletedTask;
+            Debug.LogError("--- Join Mathc Chat! 1");
         }
 
         public override async Task LeaveMatchChatAsync(CancellationToken ct = default)

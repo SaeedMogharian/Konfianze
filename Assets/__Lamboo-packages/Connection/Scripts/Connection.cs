@@ -42,7 +42,7 @@ namespace __Lamboo_packages.Connection.Scripts
         public abstract Task DisconnectAsync();
 
         // Matchmaking
-        public abstract Task StartMatchmakingAsync(PlayerRole preferredRole, CancellationToken ct = default);
+        public abstract Task StartMatchmakingAsync(CancellationToken ct = default);
         public abstract Task CancelMatchmakingAsync(CancellationToken ct = default);
 
         // Match State

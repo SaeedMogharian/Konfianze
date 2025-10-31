@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using GamePlace;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Cards;
 
 namespace Player
 {
@@ -17,67 +18,198 @@ namespace Player
         private NormalMove _normalMove;
         private KnightMove _knightMove;
         private DoubleMove _doubleMove;
+        private bool _isGameOver = false;
+        private bool _isGameWon = false; // NEW: Track win state
 
         private void Awake()
         {
             _currentPlace = initializedPlace;
+            GameBoard.Instance.AddPlayerMove(initializedPlace);
             _statusController = GetComponent<PlayerStatusController>();
             
             // Initialize move types
-            _normalMove = new NormalMove { IsEnabled = true }; // Normal move is always enabled
+            _normalMove = new NormalMove { IsEnabled = true };
             _knightMove = new KnightMove();
             _doubleMove = new DoubleMove();
             
             _possibleMoves = new List<Place>();
+            
+            // Subscribe to events
+            PlayerEvents.OnMoveAbilityEnabled += HandleMoveAbilityEnabled;
+            PlayerEvents.OnAllAbilitiesDestroyed += DisableAllSpecialMoves;
+            PlayerEvents.OnGameOver += HandleGameOver;
+            PlayerEvents.OnGameWin += HandleGameWin; // NEW: Subscribe to win event
         }
         
-        // Public methods to enable/disable special moves
-        public void EnableKnightMove(bool enable) => _knightMove.IsEnabled = enable;
-        public void EnableDoubleMove(bool enable) => _doubleMove.IsEnabled = enable;
+        // NEW: Handle game win event
+        private void HandleGameWin()
+        {
+            _isGameWon = true;
+            
+            // Light off all possible moves
+            foreach (var possiblePlace in _possibleMoves)
+            {
+                possiblePlace.LightOff();
+            }
+            _possibleMoves.Clear();
+            
+            Debug.Log("Player movement disabled - Game Won!");
+        }
         
+        private void HandleGameOver()
+        {
+            _isGameOver = true;
+            
+            // Light off all possible moves
+            foreach (var possiblePlace in _possibleMoves)
+            {
+                possiblePlace.LightOff();
+            }
+            _possibleMoves.Clear();
+            
+            Debug.Log("Player movement disabled due to game over.");
+        }
+        
+        private void OnDestroy()
+        {
+            // Unsubscribe from events
+            PlayerEvents.OnMoveAbilityEnabled -= HandleMoveAbilityEnabled;
+            PlayerEvents.OnAllAbilitiesDestroyed -= DisableAllSpecialMoves;
+            PlayerEvents.OnGameOver -= HandleGameOver;
+            PlayerEvents.OnGameWin -= HandleGameWin; // NEW: Unsubscribe
+        }
+
+        private void HandleMoveAbilityEnabled(MoveAbilityCardData.MoveType moveType)
+        {
+            if (_isGameOver || _isGameWon) return; // NEW: Don't process if game over OR won
+            
+            switch (moveType)
+            {
+                case MoveAbilityCardData.MoveType.Knight:
+                    _knightMove.IsEnabled = true;
+                    break;
+                case MoveAbilityCardData.MoveType.Double:
+                    _doubleMove.IsEnabled = true;
+                    break;
+                default:
+                    Debug.LogWarning($"Unknown move type: {moveType}");
+                    break;
+            }
+        }
+        
+        private void DisableAllSpecialMoves()
+        {
+            if (_isGameOver || _isGameWon) return; // NEW: Don't process if game over OR won
+            
+            _knightMove.IsEnabled = false;
+            _doubleMove.IsEnabled = false;
+            Debug.Log("All special movement abilities have been destroyed!");
+        }
+
         private void Update()
         {
+            // NEW: Don't process anything if game is over OR won
+            if (_isGameOver || _isGameWon) return;
+            
             // Check if the state is good for move
             if (GameBoard.Instance.State != RoundState.Choose) return;
             
             // Calculate and show possible moves
             CalculatePossibleMoves();
             
+            // Light Up possible places
+            foreach (var possiblePlace in _possibleMoves)
+            {
+                possiblePlace.LightUp();
+            }
+            
             // Get Mouse Click
             if (!Mouse.current.leftButton.wasPressedThisFrame) return;
             
             var ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
             if (!Physics.Raycast(ray, out var hit, 100f)) return;
+            
             var clickedPlace = hit.transform.GetComponent<Place>();
             if (clickedPlace is null)
                 return;
             
             // Check if clicked place is in possible moves
-            if (!_possibleMoves.Exists(place => place.Id == clickedPlace.Id)) return;
+            if (!_possibleMoves.Exists(place => place.Id == clickedPlace.Id) || !HasEnoughFoodToMove())
+                return;
             
-            // Transform player
-            Debug.Log("Clicked Place id: " + clickedPlace.Id);
-            GameBoard.Instance.AddPlayerMove(clickedPlace);
-            transform.position = clickedPlace.transform.position;
-            transform.position -= Vector3.forward * 2;
-            _currentPlace = clickedPlace;
+            MoveToPlace(clickedPlace);
+        }
+        
+        private bool HasEnoughFoodToMove()
+        {
+            if (_statusController.Food >= 1)
+            {
+                return true;
+            }
+            else {
+                Debug.Log("Not enough food to move! You need at least 1 food to travel.");
+                return false;
+            }
+        }
+        
+        private void MoveToPlace(Place targetPlace)
+        {
+            if (_isGameOver || _isGameWon) return; // NEW: Don't process if game over OR won
             
-            // Change game state if move is successful
+            Debug.Log($"Moving to place: {targetPlace.Id}");
+            
+            // Move the player visually
+            transform.position = targetPlace.transform.position - Vector3.forward * 2;
+            _currentPlace = targetPlace;
+            
+            //Light Off possible places
+            foreach (var possiblePlace in _possibleMoves)
+            {
+                possiblePlace.LightOff();
+            }
+            
+            // Update game state
+            GameBoard.Instance.AddPlayerMove(targetPlace);
             GameBoard.Instance.ChangeRoundState();
             
-            // Handle status consequences
-            _statusController.Consequence(_currentPlace);
+            // Move consequence
+            _statusController.ApplyMoveConsequence();
+            
+            // NEW: Check for win condition - if reached End category place
+            if (targetPlace.Category == PlaceCategory.End)
+            {
+                TriggerGameWin();
+                return; // Stop further processing since game is won
+            }
+            
+            // Draw and process a card from the place
+            CardData receivedCard = _currentPlace.DrawCard();
+            if (receivedCard)
+            {
+                _statusController.ProcessReceivedCard(receivedCard);
+            }
+        }
+        
+        // NEW: Method to trigger game win
+        private void TriggerGameWin()
+        {
+            Debug.Log("Game Won! Reached End category place!");
+            PlayerEvents.TriggerGameWin();
         }
         
         private void CalculatePossibleMoves()
         {
-            // Clear previous possible moves
+            if (_isGameOver || _isGameWon) return; // NEW: Don't process if game over OR won
+            
             _possibleMoves.Clear();
             
-            // Get moves from all enabled move types
             _possibleMoves.AddRange(_normalMove.GetPossibleMoves(_currentPlace));
-            _possibleMoves.AddRange(_knightMove.GetPossibleMoves(_currentPlace));
-            _possibleMoves.AddRange(_doubleMove.GetPossibleMoves(_currentPlace));
+            
+            if (_knightMove.IsEnabled)
+                _possibleMoves.AddRange(_knightMove.GetPossibleMoves(_currentPlace));
+                
+            if (_doubleMove.IsEnabled)
+                _possibleMoves.AddRange(_doubleMove.GetPossibleMoves(_currentPlace));
         }
     }
     

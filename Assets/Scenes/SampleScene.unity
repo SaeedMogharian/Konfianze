@@ -247,15 +247,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 2
-  food: 0
-  health: 0
-  powerupType: 0
-  danger: 0
-  endpoint: 0
   leftPlace: {fileID: 1135502018}
   rightPlace: {fileID: 19606978}
   upPlace: {fileID: 0}
   downPlace: {fileID: 491895084}
+  category: 0
+  possibleCards: []
 --- !u!1001 &19606975
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -348,15 +345,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 3
-  food: 0
-  health: 0
-  powerupType: 0
-  danger: 0
-  endpoint: 0
   leftPlace: {fileID: 8024290}
   rightPlace: {fileID: 0}
   upPlace: {fileID: 0}
   downPlace: {fileID: 1227335144}
+  category: 4
+  possibleCards:
+  - {fileID: 11400000, guid: b163a39a281034174a2162a4966eeeed, type: 2}
+  - {fileID: 11400000, guid: a41013b60e6524bf0b124cc6ea3afdfa, type: 2}
 --- !u!1 &55557039
 GameObject:
   m_ObjectHideFlags: 0
@@ -1057,15 +1053,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 5
-  food: 0
-  health: 0
-  powerupType: 0
-  danger: 0
-  endpoint: 0
   leftPlace: {fileID: 1764569070}
   rightPlace: {fileID: 1227335144}
   upPlace: {fileID: 8024290}
   downPlace: {fileID: 825467303}
+  category: 2
+  possibleCards:
+  - {fileID: 11400000, guid: 8506f379c6fce4d3596550983ec81430, type: 2}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1610,15 +1604,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 8
-  food: 0
-  health: 0
-  powerupType: 0
-  danger: 0
-  endpoint: 0
   leftPlace: {fileID: 1654440920}
   rightPlace: {fileID: 1875795737}
   upPlace: {fileID: 491895084}
   downPlace: {fileID: 0}
+  category: 2
+  possibleCards:
+  - {fileID: 11400000, guid: e1cd80dc788e845b5accac360bd46295, type: 2}
 --- !u!1 &1036359852
 GameObject:
   m_ObjectHideFlags: 0
@@ -1746,15 +1738,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 1
-  food: 0
-  health: 0
-  powerupType: 0
-  danger: 0
-  endpoint: 0
   leftPlace: {fileID: 0}
   rightPlace: {fileID: 8024290}
   upPlace: {fileID: 0}
   downPlace: {fileID: 1764569070}
+  category: 3
+  possibleCards:
+  - {fileID: 11400000, guid: 80694f7d77fc74ff5824ac4e8fc684b3, type: 2}
 --- !u!1001 &1227335141
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1847,15 +1837,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 6
-  food: 0
-  health: 0
-  powerupType: 0
-  danger: 0
-  endpoint: 0
   leftPlace: {fileID: 491895084}
   rightPlace: {fileID: 0}
   upPlace: {fileID: 19606978}
   downPlace: {fileID: 1875795737}
+  category: 0
+  possibleCards: []
+--- !u!1 &1580383604
 --- !u!1 &1262232893
 GameObject:
   m_ObjectHideFlags: 0
@@ -1864,6 +1852,11 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+  - component: {fileID: 1580383606}
+  - component: {fileID: 1580383605}
+  - component: {fileID: 1580383607}
+  - component: {fileID: 1580383608}
+  - component: {fileID: 1580383609}
   - component: {fileID: 1262232894}
   - component: {fileID: 1262232897}
   - component: {fileID: 1262232896}
@@ -1989,6 +1982,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7fda680487b38144d9b7c04e2df15173, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
+  food: 0
+  health: 0
+  time: 0
+--- !u!114 &1580383609
   m_EditorClassIdentifier: Assembly-CSharp::__Lamboo_packages.Connection.Scripts.SendButton
   message: {fileID: 249982892}
   connection: {fileID: 11400000, guid: fdb48c87e4a23a54c9e16a3769becb0f, type: 2}
@@ -2327,6 +2325,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1580383604}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8879b5b1900114640bce97579d89cefb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   m_Script: {fileID: 11500000, guid: 3b24cbb33c52e4c118244a8ea1e8a436, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
@@ -2424,15 +2425,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 7
-  food: 0
-  health: 0
-  powerupType: 0
-  danger: 0
-  endpoint: 0
   leftPlace: {fileID: 0}
   rightPlace: {fileID: 825467303}
   upPlace: {fileID: 1764569070}
   downPlace: {fileID: 0}
+  category: 0
+  possibleCards: []
 --- !u!1 &1722419868
 GameObject:
   m_ObjectHideFlags: 0
@@ -2651,15 +2649,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 4
-  food: 0
-  health: 0
-  powerupType: 0
-  danger: 0
-  endpoint: 0
   leftPlace: {fileID: 0}
   rightPlace: {fileID: 491895084}
   upPlace: {fileID: 1135502018}
   downPlace: {fileID: 1654440920}
+  category: 3
+  possibleCards:
+  - {fileID: 11400000, guid: 80694f7d77fc74ff5824ac4e8fc684b3, type: 2}
+  - {fileID: 11400000, guid: c5f8f8be239f64f8c845a0e683464511, type: 2}
 --- !u!1 &1802383214
 GameObject:
   m_ObjectHideFlags: 0
@@ -3088,15 +3085,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 9
-  food: 0
-  health: 0
-  powerupType: 0
-  danger: 0
-  endpoint: 0
   leftPlace: {fileID: 825467303}
   rightPlace: {fileID: 0}
   upPlace: {fileID: 1227335144}
   downPlace: {fileID: 0}
+  category: 0
+  possibleCards: []
 --- !u!1 &1918463797
 GameObject:
   m_ObjectHideFlags: 0

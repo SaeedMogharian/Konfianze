@@ -27,6 +27,7 @@ namespace __Lamboo_packages.Connection.Scripts
 
         protected override async Task InitializeFrameworkAsync(CancellationToken ct = default)
         {
+            Debug.Log("========= LAMBO: Initializing NakamaConnection");
             // TODO: SSL and HTTPS
             var scheme = UseSSL ? "https" : "http";
             _client = new Client(scheme, host, port, serverKey)
@@ -38,6 +39,7 @@ namespace __Lamboo_packages.Connection.Scripts
 
         protected override async Task AuthenticateDeviceAsync(string deviceId, CancellationToken ct)
         {
+            Debug.Log("========= LAMBO: Authenticating NakamaConnection");
             _session = await _client.AuthenticateDeviceAsync(deviceId);
 
             await Task.CompletedTask;
@@ -51,6 +53,7 @@ namespace __Lamboo_packages.Connection.Scripts
 
         protected override async Task ConnectSocketAsync(CancellationToken ct = default)
         {
+            Debug.Log("========= LAMBO: Connecting");
             if (_session == null || _session.IsExpired) throw new InvalidOperationException("Authenticate first.");
 
             _socket = _client.NewSocket(useMainThread: true);
@@ -68,12 +71,14 @@ namespace __Lamboo_packages.Connection.Scripts
 
         public override async Task DisconnectAsync()
         {
+            Debug.Log("========= LAMBO: Disconnecting");
             if (_socket is { IsConnected: true }) await _socket.CloseAsync();
             _socket = null;
         }
 
         public override async Task StartMatchmakingAsync(CancellationToken ct = default)
         {
+            Debug.Log("========= LAMBO: Starting Matchmaking");
             EnsureSocket();
 
             const string query = "*";
@@ -87,6 +92,7 @@ namespace __Lamboo_packages.Connection.Scripts
 
         public override async Task CancelMatchmakingAsync(CancellationToken ct = default)
         {
+            Debug.Log("========= LAMBO: Canceling Matchmaking");
             await Task.CompletedTask;
 
             await Task.CompletedTask;
@@ -94,6 +100,7 @@ namespace __Lamboo_packages.Connection.Scripts
 
         public override async Task SendMatchStateAsync(long opCode, string jsonPayload, CancellationToken ct = default)
         {
+            Debug.Log("========= LAMBO: Sending Match State");
             EnsureSocket();
             if (_currentMatch == null) throw new InvalidOperationException("Not in a match.");
             var data = string.IsNullOrEmpty(jsonPayload) ? null : Encoding.UTF8.GetBytes(jsonPayload);
@@ -104,6 +111,7 @@ namespace __Lamboo_packages.Connection.Scripts
 
         public override async Task JoinMatchChatAsync(CancellationToken ct = default)
         {
+            Debug.Log("========= LAMBO: Joining Match Chat");
             EnsureSocket();
             if (_currentMatch == null) throw new InvalidOperationException("Not in a match.");
 
@@ -119,6 +127,7 @@ namespace __Lamboo_packages.Connection.Scripts
 
         public override async Task LeaveMatchChatAsync(CancellationToken ct = default)
         {
+            Debug.Log("========= LAMBO: Leaveing Match Chat");
             if (!string.IsNullOrEmpty(_chatChannelId))
             {
                 await _socket.LeaveChatAsync(_chatChannelId);
@@ -132,6 +141,7 @@ namespace __Lamboo_packages.Connection.Scripts
         public override async Task SendChatAsync(string text, string tag = null, bool isSystem = false,
             CancellationToken ct = default)
         {
+            Debug.Log("========= LAMBO: Sending Chat");
             EnsureSocket();
             if (string.IsNullOrEmpty(_chatChannelId)) throw new InvalidOperationException("Join chat first.");
 

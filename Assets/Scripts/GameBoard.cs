@@ -26,11 +26,6 @@ public class GameBoard : MonoBehaviour
 
         if (state == RoundState.Guidance)
         {
-            // Update guide visibility when entering guidance state
-            if (GuideManager.Instance != null)
-            {
-                GuideManager.Instance.UpdateGuideVisibility();
-            }
             ChangeRoundState();
         }
     }
@@ -39,11 +34,7 @@ public class GameBoard : MonoBehaviour
     {
         playerMoves.Add(newPlace);
         
-        // Notify guide system of player move
-        if (GuideManager.Instance != null)
-        {
-            GuideManager.Instance.OnPlayerMove(newPlace);
-        }
+        
     }
 
     private void Awake()

@@ -5,11 +5,14 @@ using System.Collections;
 
 namespace Player
 {
+    [RequireComponent(typeof(PlayerAbilityController))]
     public class PlayerStatusController : MonoBehaviour
     {
         [SerializeField] private int food;
         [SerializeField] private int health;
         [SerializeField] private int time;
+        
+        private PlayerAbilityController _abilityController;
         
         public int Food => food;
         public int Health => health;
@@ -19,7 +22,7 @@ namespace Player
         private bool _isTimerRunning = false;
         private bool _isGameOver = false;
         public bool IsGameOver() => _isGameOver;
-        private bool _isGameWon = false; // NEW: Track win state
+        private bool _isGameWon = false;
         
         private void Awake()
         {
@@ -28,6 +31,7 @@ namespace Player
             time = 120;
             
             StartTimer();
+            _abilityController = GetComponent<PlayerAbilityController>();
         }
 
         private void Update()
@@ -107,15 +111,6 @@ namespace Player
             }
         }
 
-        // private void TimeRunOut()
-        // {
-        //     if (_isGameOver) return; // NEW: Don't trigger if already game over
-        //     
-        //     Debug.Log("Time's up! Game over!");
-        //     PlayerEvents.TriggerTimeRunOut();
-        //     TriggerGameOver("Time's up!");
-        // }
-
         public void ApplyMoveConsequence()
         {
             if (_isGameOver || _isGameWon) return;
@@ -191,6 +186,7 @@ namespace Player
         private void ApplyVisionAbilityCard(VisionAbilityCardData visionCard)
         {
             if (_isGameOver || _isGameWon) return;
+            _abilityController.AddVisionCard(visionCard);
             PlayerEvents.TriggerVisionAbilityAdded(visionCard);
         }
         

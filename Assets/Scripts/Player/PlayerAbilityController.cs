@@ -3,6 +3,8 @@ using UnityEngine;
 using Cards;
 using GamePlace;
 using UnityEngine.InputSystem;
+using System.Collections;
+
 
 namespace Player
 {
@@ -20,7 +22,6 @@ namespace Player
 
         private void Awake()
         {
-            // Subscribe to events
             PlayerEvents.OnGameOver += HandleGameOver;
             PlayerEvents.OnGameWin += HandleGameWin;
             GameBoard.OnStateChange += HandleStateChange;
@@ -78,31 +79,58 @@ namespace Player
             }
         }
 
-        private void HandleVisionCardSelection()
-        {
-            // Check for number keys to select vision cards (1, 2, 3, etc.)
-            for (int i = 0; i < _heldVisionCards.Count; i++)
-            {
-                if (Keyboard.current.digit1Key.wasPressedThisFrame && i == 0 ||
-                    Keyboard.current.digit2Key.wasPressedThisFrame && i == 1 ||
-                    Keyboard.current.digit3Key.wasPressedThisFrame && i == 2 ||
-                    Keyboard.current.digit4Key.wasPressedThisFrame && i == 3 ||
-                    Keyboard.current.digit5Key.wasPressedThisFrame && i == 4)
-                {
-                    StartUsingVisionCard(i);
-                    break;
-                }
-            }
+        private Coroutine _visionSelectionCoroutine;
 
-            // Optional: Show UI instructions
-            if (_heldVisionCards.Count > 0)
+        public void HandleVisionCardSelection()
+        {
+            if (_visionSelectionCoroutine != null)
             {
-                Debug.Log("Ability Appliance Stage: Press 1-" + _heldVisionCards.Count + " to use a vision card, or press ESC to skip.");
+                StopCoroutine(_visionSelectionCoroutine);
             }
-            else
+            _visionSelectionCoroutine = StartCoroutine(VisionCardSelectionRoutine());
+        }
+
+        private IEnumerator VisionCardSelectionRoutine()
+        {
+            if (_heldVisionCards.Count == 0)
             {
                 Debug.Log("Ability Appliance Stage: No vision cards available.");
                 GameBoard.Instance.ChangeRoundState();
+                yield break;
+            }
+
+            Debug.Log("Ability Appliance Stage: Press 1-" + _heldVisionCards.Count + " to use a vision card, or press ESC to skip.");
+
+            bool selectionMade = false;
+
+            while (!selectionMade)
+            {
+                // Check if game state changed — break if needed
+                if (GameBoard.Instance.State != RoundState.AbilityAppliance) // adjust to your real state name
+                {
+                    Debug.Log("State changed, exiting vision selection.");
+                    yield break;
+                }
+
+                for (int i = 0; i < _heldVisionCards.Count; i++)
+                {
+                    Key key = Key.Digit1 + i; // Key enum has Digit1, Digit2, ...
+                    if (Keyboard.current[key].wasPressedThisFrame)
+                    {
+                        StartUsingVisionCard(i);
+                        selectionMade = true;
+                        break;
+                    }
+                }
+
+                // if (Keyboard.current.escapeKey.wasPressedThisFrame)
+                // {
+                //     Debug.Log("Skipped vision card usage.");
+                //     selectionMade = true;
+                //     GameBoard.Instance.ChangeRoundState();
+                // }
+
+                yield return null; // wait one frame before checking again
             }
         }
 
@@ -149,7 +177,7 @@ namespace Player
                 {
                     ApplyVisionCardEffect(cardToUse, null);
                     // Move to next stage after using non-place ability
-                    GameBoard.Instance.ChangeRoundState();
+                    // GameBoard.Instance.ChangeRoundState();
                 }
             }
         }

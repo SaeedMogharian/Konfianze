@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: LandlordGuide
   m_EditorClassIdentifier: Assembly-CSharp:Guides:LandlordGuide
   guideName: 
-  visibleCategories: 
+  visibleCategories: 02000000

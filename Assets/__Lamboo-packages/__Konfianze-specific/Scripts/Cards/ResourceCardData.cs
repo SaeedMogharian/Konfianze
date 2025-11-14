@@ -1,8 +1,8 @@
 // ResourceCardData.cs
-using Player;
+
 using UnityEngine;
 
-namespace Cards
+namespace __Lamboo_packages.__Konfianze_specific.Scripts.Cards
 {
     [CreateAssetMenu(fileName = "New Resource Cards", menuName = "Cards/Resource Cards")]
     public class ResourceCardData : CardData

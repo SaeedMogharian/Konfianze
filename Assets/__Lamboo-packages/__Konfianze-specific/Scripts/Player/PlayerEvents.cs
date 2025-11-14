@@ -1,9 +1,9 @@
 // PlayerEvents.cs
-using System;
-using UnityEngine;
-using Cards;
 
-namespace Player
+using System;
+using __Lamboo_packages.__Konfianze_specific.Scripts.Cards;
+
+namespace __Lamboo_packages.__Konfianze_specific.Scripts.Player
 {
     public static class PlayerEvents
     {

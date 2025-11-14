@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Cards
+namespace __Lamboo_packages.__Konfianze_specific.Scripts.Cards
 {
     [CreateAssetMenu(fileName = "New Destroy All Abilities Cards", menuName = "Cards/Destroy Abilities")]
     public class DestroyAllAbilitiesCardData : CardData

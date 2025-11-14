@@ -1,8 +1,6 @@
 using UnityEngine;
-using Player;
 
-
-namespace Cards
+namespace __Lamboo_packages.__Konfianze_specific.Scripts.Cards
 {
     public enum VisionType
     {

@@ -1,10 +1,11 @@
 using System.Collections.Generic;
-using GamePlace;
+using __Lamboo_packages.__Konfianze_specific.Scripts.Cards;
+using __Lamboo_packages.__Konfianze_specific.Scripts.GameBoard;
+using __Lamboo_packages.__Konfianze_specific.Scripts.GamePlace;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Cards;
 
-namespace Player
+namespace __Lamboo_packages.__Konfianze_specific.Scripts.Player
 {
     [RequireComponent(typeof(PlayerStatusController))]
     public class PlayerMoveController : MonoBehaviour
@@ -24,7 +25,7 @@ namespace Player
         private void Awake()
         {
             _currentPlace = initializedPlace;
-            GameBoard.Instance.AddPlayerMove(initializedPlace);
+            GameBoard.GameBoard.Instance.AddPlayerMove(initializedPlace);
             _statusController = GetComponent<PlayerStatusController>();
             
             // Initialize move types
@@ -112,7 +113,7 @@ namespace Player
             if (_isGameOver || _isGameWon) return;
             
             // Check if the state is good for move
-            if (GameBoard.Instance.State != RoundState.Choose) return;
+            if (GameBoard.GameBoard.Instance.State != RoundState.Choose) return;
             
             // Calculate and show possible moves
             CalculatePossibleMoves();
@@ -169,8 +170,8 @@ namespace Player
             }
             
             // Update game state
-            GameBoard.Instance.AddPlayerMove(targetPlace);
-            GameBoard.Instance.ChangeRoundState();
+            GameBoard.GameBoard.Instance.AddPlayerMove(targetPlace);
+            GameBoard.GameBoard.Instance.ChangeRoundState();
             
             // Move consequence
             _statusController.ApplyMoveConsequence();

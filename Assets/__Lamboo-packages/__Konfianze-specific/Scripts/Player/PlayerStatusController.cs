@@ -1,9 +1,8 @@
-using System;
-using UnityEngine;
-using Cards;
 using System.Collections;
+using __Lamboo_packages.__Konfianze_specific.Scripts.Cards;
+using UnityEngine;
 
-namespace Player
+namespace __Lamboo_packages.__Konfianze_specific.Scripts.Player
 {
     [RequireComponent(typeof(PlayerAbilityController))]
     public class PlayerStatusController : MonoBehaviour

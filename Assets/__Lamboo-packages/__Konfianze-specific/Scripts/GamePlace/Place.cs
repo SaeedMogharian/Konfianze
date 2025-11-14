@@ -1,10 +1,9 @@
-using UnityEngine;
-using Cards;
-using System.Collections;
 using System.Collections.Generic;
-using Guides;
+using __Lamboo_packages.__Konfianze_specific.Scripts.Guides;
+using __Lamboo_packages.__Konfianze_specific.Scripts.Cards;
+using UnityEngine;
 
-namespace GamePlace
+namespace __Lamboo_packages.__Konfianze_specific.Scripts.GamePlace
 {
     public class Place : MonoBehaviour
     {

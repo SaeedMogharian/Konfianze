@@ -1,7 +1,6 @@
 using UnityEngine;
-using Player;
 
-namespace Cards
+namespace __Lamboo_packages.__Konfianze_specific.Scripts.Cards
 {
     [CreateAssetMenu(fileName = "New Move Ability Cards", menuName = "Cards/Move Ability Cards")]
     public class MoveAbilityCardData : CardData

@@ -1,12 +1,12 @@
-using System.Collections.Generic;
-using UnityEngine;
-using Cards;
-using GamePlace;
-using UnityEngine.InputSystem;
 using System.Collections;
+using System.Collections.Generic;
+using __Lamboo_packages.__Konfianze_specific.Scripts.Cards;
+using __Lamboo_packages.__Konfianze_specific.Scripts.GameBoard;
+using __Lamboo_packages.__Konfianze_specific.Scripts.GamePlace;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
-
-namespace Player
+namespace __Lamboo_packages.__Konfianze_specific.Scripts.Player
 {
     public class PlayerAbilityController : MonoBehaviour
     {
@@ -24,7 +24,7 @@ namespace Player
         {
             PlayerEvents.OnGameOver += HandleGameOver;
             PlayerEvents.OnGameWin += HandleGameWin;
-            GameBoard.OnStateChange += HandleStateChange;
+            GameBoard.GameBoard.OnStateChange += HandleStateChange;
         }
 
         private void OnDestroy()
@@ -32,7 +32,7 @@ namespace Player
             // Unsubscribe from events
             PlayerEvents.OnGameOver -= HandleGameOver;
             PlayerEvents.OnGameWin -= HandleGameWin;
-            GameBoard.OnStateChange -= HandleStateChange;
+            GameBoard.GameBoard.OnStateChange -= HandleStateChange;
         }
 
         private void HandleGameOver()
@@ -65,7 +65,7 @@ namespace Player
             if (_isGameOver || _isGameWon) return;
 
             // Only process during Ability Appliance stage
-            if (GameBoard.Instance.State != RoundState.AbilityAppliance) return;
+            if (GameBoard.GameBoard.Instance.State != RoundState.AbilityAppliance) return;
 
             // If we're waiting for place selection, handle mouse clicks
             if (_isWaitingForPlaceSelection)
@@ -95,7 +95,7 @@ namespace Player
             if (_heldVisionCards.Count == 0)
             {
                 Debug.Log("Ability Appliance Stage: No vision cards available.");
-                GameBoard.Instance.ChangeRoundState();
+                GameBoard.GameBoard.Instance.ChangeRoundState();
                 yield break;
             }
 
@@ -106,7 +106,7 @@ namespace Player
             while (!selectionMade)
             {
                 // Check if game state changed — break if needed
-                if (GameBoard.Instance.State != RoundState.AbilityAppliance) // adjust to your real state name
+                if (GameBoard.GameBoard.Instance.State != RoundState.AbilityAppliance) // adjust to your real state name
                 {
                     Debug.Log("State changed, exiting vision selection.");
                     yield break;
@@ -152,7 +152,7 @@ namespace Player
             _currentVisionCard = null;
 
             // Automatically move to next stage after using ability
-            GameBoard.Instance.ChangeRoundState();
+            GameBoard.GameBoard.Instance.ChangeRoundState();
         }
 
         public void AddVisionCard(VisionAbilityCardData card)
@@ -195,7 +195,7 @@ namespace Player
                 else if (cardToUse.visionType == VisionType.RevealGuideRole)
                 {
                     ApplyVisionCardEffect(cardToUse, null);
-                    GameBoard.Instance.ChangeRoundState();
+                    GameBoard.GameBoard.Instance.ChangeRoundState();
                 }
             }
         }
